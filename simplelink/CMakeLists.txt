@@ -68,6 +68,7 @@ elseif(CONFIG_HAS_CC13X2_CC26X2_SDK)
     source/ti/drivers/utils/List.c
     source/ti/drivers/rf/RFCC26X2_multiMode.c
 
+    kernel/zephyr/dpl/stubs.c
     kernel/zephyr/dpl/ClockP_zephyr.c
     kernel/zephyr/dpl/HwiP_zephyr.c
     kernel/zephyr/dpl/SwiP_zephyr.c
