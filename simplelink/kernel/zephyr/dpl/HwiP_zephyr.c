@@ -222,8 +222,12 @@ void HwiP_restore(uintptr_t key)
 }
 
 void HwiP_post(int interruptNum) {
+    ARG_UNUSED(interruptNum);
     STUB("");
 }
 void HwiP_setFunc(HwiP_Handle hwiP, HwiP_Fxn fxn, uintptr_t arg) {
+    ARG_UNUSED(hwiP);
+    ARG_UNUSED(fxn);
+    ARG_UNUSED(arg);
     STUB("");
 }

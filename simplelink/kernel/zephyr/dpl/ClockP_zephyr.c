@@ -60,9 +60,10 @@ ClockP_Handle ClockP_construct(ClockP_Struct *handle, ClockP_Fxn clockFxn,
 /*
  *  ======== ClockP_getSystemTickPeriod ========
  */
+uint32_t ClockP_tickPeriod = (1000000 / CONFIG_SYS_CLOCK_TICKS_PER_SEC);
 uint32_t ClockP_getSystemTickPeriod()
 {
-	return (1000000 / CONFIG_SYS_CLOCK_TICKS_PER_SEC);
+   return ClockP_tickPeriod;
 }
 
 uint32_t ClockP_getSystemTicks()
@@ -119,11 +120,12 @@ void ClockP_usleep(uint32_t usec)
 }
 
 uint32_t ClockP_getTimeout(ClockP_Handle handle) {
+    ARG_UNUSED(handle);
     STUB("");
     return 0;
 }
 bool ClockP_isActive(ClockP_Handle handle) {
+    ARG_UNUSED(handle);
     STUB("");
     return false;
 }
-uint32_t ClockP_tickPeriod = -1;
