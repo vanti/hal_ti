@@ -141,6 +141,25 @@ void SemaphoreP_post(SemaphoreP_Handle handle)
 	k_sem_give((struct k_sem *)handle);
 }
 
+SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct *handle,
+                    unsigned int count, SemaphoreP_Params *params)
+{
+    unsigned int limit = UINT_MAX;
+    struct k_sem *sem;
+
+    if (params) {
+        limit = (params->mode == SemaphoreP_Mode_BINARY) ?
+            1 : UINT_MAX;
+    }
+
+    sem = (struct k_sem *)handle;
+    if (sem) {
+        k_sem_init(sem, 0, limit);
+    }
+
+    return (SemaphoreP_Handle)sem;
+}
+
 SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct *handle, unsigned int count) {
     STUB("");
     return NULL;
