@@ -161,6 +161,10 @@ SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct *handle,
 }
 
 SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct *handle, unsigned int count) {
-    STUB("");
-    return NULL;
+    SemaphoreP_Params params;
+
+    SemaphoreP_Params_init(&params);
+    params.mode = SemaphoreP_Mode_BINARY;
+
+    return (SemaphoreP_construct(handle, count, &params));
 }
