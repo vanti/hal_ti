@@ -46,7 +46,8 @@ void SwiP_or(SwiP_Handle handle, uint32_t mask) {
     STUB("");
 }
 void SwiP_Params_init(SwiP_Params *params) {
-    ARG_UNUSED(params);
-    STUB("");
+    params->arg0 = 0;      // could also be a pointer on 32-bit systems
+    params->arg1 = 0;      // could also be a pointer on 32-bit systems
+    params->priority = 0;  // lowest priority
+    params->trigger = 0;   // could also be a pointer on 32-bit systems
 }
-
