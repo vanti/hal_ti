@@ -20,7 +20,6 @@
 #include <driverlib/interrupt.h>
 
 #include <ti/drivers/net/wifi/simplelink.h>
-#include <ti/drivers/rf/RF.h>
 #include <kernel/zephyr/dpl/dpl.h>
 
 #define	 SPAWN_TASK_STACKSIZE  2048
@@ -115,4 +114,3 @@ int dpl_set_errno(int err)
 	return -1;
 }
 #endif
-
