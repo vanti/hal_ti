@@ -8,6 +8,7 @@
 
 #include <ti/drivers/dpl/SwiP.h>
 
+#include "stubs.h"
 
 /*
  *  ======== SwiP_disable ========
@@ -27,3 +28,19 @@ void SwiP_restore(uintptr_t key)
     ARG_UNUSED(key);
     k_sched_unlock();
 }
+
+SwiP_Handle SwiP_construct(SwiP_Struct *swiP, SwiP_Fxn swiFxn, SwiP_Params *params) {
+    STUB("");
+    return NULL;
+}
+uint32_t SwiP_getTrigger(void) {
+    STUB("");
+    return 0;
+}
+void SwiP_or(SwiP_Handle handle, uint32_t mask) {
+    STUB("");
+}
+void SwiP_Params_init(SwiP_Params *params) {
+    STUB("");
+}
+

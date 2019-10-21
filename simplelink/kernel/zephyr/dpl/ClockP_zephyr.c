@@ -9,6 +9,8 @@
 #include <kernel/zephyr/dpl/dpl.h>
 #include <ti/drivers/dpl/ClockP.h>
 
+#include "stubs.h"
+
 /* 
  * ClockP_STRUCT_SIZE in ClockP.h must be updated to match the size of this
  * struct
@@ -115,3 +117,13 @@ void ClockP_usleep(uint32_t usec)
 {
 	k_sleep((s32_t)usec);
 }
+
+uint32_t ClockP_getTimeout(ClockP_Handle handle) {
+    STUB("");
+    return 0;
+}
+bool ClockP_isActive(ClockP_Handle handle) {
+    STUB("");
+    return false;
+}
+uint32_t ClockP_tickPeriod = -1;

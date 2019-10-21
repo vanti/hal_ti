@@ -18,6 +18,7 @@
 #endif
 #include <driverlib/interrupt.h>
 
+#include "stubs.h"
 
 /*
  * IRQ_CONNECT requires we know the ISR signature and argument
@@ -218,4 +219,11 @@ uintptr_t HwiP_disable(void)
 void HwiP_restore(uintptr_t key)
 {
 	irq_unlock(key);
+}
+
+void HwiP_post(int interruptNum) {
+    STUB("");
+}
+void HwiP_setFunc(HwiP_Handle hwiP, HwiP_Fxn fxn, uintptr_t arg) {
+    STUB("");
 }

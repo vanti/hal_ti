@@ -9,6 +9,8 @@
 #include <kernel/zephyr/dpl/dpl.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
 
+#include "stubs.h"
+
 /*
  * Zephyr kernel object pools:
  *
@@ -137,4 +139,9 @@ SemaphoreP_Status SemaphoreP_pend(SemaphoreP_Handle handle, uint32_t timeout)
 void SemaphoreP_post(SemaphoreP_Handle handle)
 {
 	k_sem_give((struct k_sem *)handle);
+}
+
+SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct *handle, unsigned int count) {
+    STUB("");
+    return NULL;
 }
