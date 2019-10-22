@@ -150,12 +150,17 @@ HwiP_Handle HwiP_construct(HwiP_Struct *handle, int interruptNum,
 {
 	HwiP_Obj *obj = (HwiP_Obj *)handle;
 	uintptr_t arg = 0;
+	uint8_t priority = 255; /* default to lowest priority */
 	
 	if (handle == NULL) {
 		return NULL;
 	}
 
 	if (params) {
+		__ASSERT(((0 <= priority) && (255 >= priority)),
+			"Expected priority: 0 to 255, got: 0x%x\r\n",
+			(unsigned int)priority);
+		priority = params->priority;
 		arg = params->arg;
 	}
 
@@ -167,37 +172,24 @@ HwiP_Handle HwiP_construct(HwiP_Struct *handle, int interruptNum,
 		 "Unexpected interruptNum: %d\r\n",
 		 interruptNum);
 
-	/*
-	 * Priority expected is either:
-	 *    INT_PRI_LEVEL7,
-	 *    or ~0 or 255 (meaning lowest priority)
-	 *    ~0 and 255 are meant to be the same as INT_PRI_LEVEL7.
-	 *    For ~0 or 255, we want 7; but Zephyr IRQ_CONNECT adds +1,
-	 *    so we pass 6 for those TI drivers passing prio = ~0.
-	 */
-	__ASSERT((INT_PRI_LEVEL7 == priority) ||
-		(0xff == (priority & 0xff)),
-		"Expected priority: 0x%x or 0x%x, got: 0x%x\r\n",
-		INT_PRI_LEVEL7, 0xff, (unsigned int)priority);
-
 	switch(interruptNum) {
 	case INT_OSC_COMB:
 		sl_OSC_COMB_cb.cb = hwiFxn;
 		sl_OSC_COMB_cb.arg = arg;
 		obj->cb = &sl_OSC_COMB_cb;
-		IRQ_CONNECT(INT_OSC_COMB - 16, 6, sl_isr, &sl_OSC_COMB_cb, 0);
+		IRQ_CONNECT(INT_OSC_COMB - 16, priority, sl_isr, &sl_OSC_COMB_cb, 0);
 		break;
 	case INT_AUX_COMB:
 		sl_AUX_COMB_cb.cb = hwiFxn;
 		sl_AUX_COMB_cb.arg = arg;
 		obj->cb = &sl_AUX_COMB_cb;
-		IRQ_CONNECT(INT_AUX_COMB - 16, 6, sl_isr, &sl_AUX_COMB_cb, 0);
+		IRQ_CONNECT(INT_AUX_COMB - 16, priority, sl_isr, &sl_AUX_COMB_cb, 0);
 		break;
 	case INT_SWEV0:
 		sl_SWEV0_cb.cb = hwiFxn;
 		sl_SWEV0_cb.arg = arg;
 		obj->cb = &sl_SWEV0_cb;
-		IRQ_CONNECT(INT_SWEV0 - 16, 6, sl_isr, &sl_SWEV0_cb, 0);
+		IRQ_CONNECT(INT_SWEV0 - 16, priority, sl_isr, &sl_SWEV0_cb, 0);
 		break;
 	default:
 		return(NULL);
