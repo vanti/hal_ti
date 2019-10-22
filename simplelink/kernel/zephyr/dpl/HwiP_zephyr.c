@@ -127,12 +127,20 @@ void HwiP_delete(HwiP_Handle handle)
 	irq_disable(interruptNum - 16);
 }
 #elif defined(CONFIG_SOC_SERIES_CC13X2_CC26X2)
+/* TODO: INT_PENDSV is already taken for another purpose, so let's use
+ * INT_SWEV0 since it is currently unused. Not sure if this would be a
+ * problem for anyone.
+ */
+int HwiP_swiPIntNum = INT_SWEV0;
+
 typedef struct _HwiP_Obj {
     uint32_t intNum;
+    struct sl_isr_args * cb;
 } HwiP_Obj;
 
 static struct sl_isr_args sl_OSC_COMB_cb = {NULL, 0};
 static struct sl_isr_args sl_AUX_COMB_cb = {NULL, 0};
+static struct sl_isr_args sl_SWEV0_cb = {NULL, 0};
 
 /*
  *  ======== HwiP_construct ========
@@ -152,22 +160,44 @@ HwiP_Handle HwiP_construct(HwiP_Struct *handle, int interruptNum,
 	}
 
 	/*
-	 * Currently only support INT_OSC_COMB and INT_AUX_COMB
+	 * Currently only support INT_OSC_COMB, INT_AUX_COMB, INT_SWEV0
 	 */
-	__ASSERT(INT_OSC_COMB == interruptNum || INT_AUX_COMB == interruptNum,
+	__ASSERT(INT_OSC_COMB == interruptNum || INT_AUX_COMB == interruptNum
+		|| INT_SWEV0 == interruptNum,
 		 "Unexpected interruptNum: %d\r\n",
 		 interruptNum);
+
+	/*
+	 * Priority expected is either:
+	 *    INT_PRI_LEVEL7,
+	 *    or ~0 or 255 (meaning lowest priority)
+	 *    ~0 and 255 are meant to be the same as INT_PRI_LEVEL7.
+	 *    For ~0 or 255, we want 7; but Zephyr IRQ_CONNECT adds +1,
+	 *    so we pass 6 for those TI drivers passing prio = ~0.
+	 */
+	__ASSERT((INT_PRI_LEVEL7 == priority) ||
+		(0xff == (priority & 0xff)),
+		"Expected priority: 0x%x or 0x%x, got: 0x%x\r\n",
+		INT_PRI_LEVEL7, 0xff, (unsigned int)priority);
 
 	switch(interruptNum) {
 	case INT_OSC_COMB:
 		sl_OSC_COMB_cb.cb = hwiFxn;
 		sl_OSC_COMB_cb.arg = arg;
+		obj->cb = &sl_OSC_COMB_cb;
 		IRQ_CONNECT(INT_OSC_COMB - 16, 6, sl_isr, &sl_OSC_COMB_cb, 0);
 		break;
 	case INT_AUX_COMB:
 		sl_AUX_COMB_cb.cb = hwiFxn;
 		sl_AUX_COMB_cb.arg = arg;
+		obj->cb = &sl_AUX_COMB_cb;
 		IRQ_CONNECT(INT_AUX_COMB - 16, 6, sl_isr, &sl_AUX_COMB_cb, 0);
+		break;
+	case INT_SWEV0:
+		sl_SWEV0_cb.cb = hwiFxn;
+		sl_SWEV0_cb.arg = arg;
+		obj->cb = &sl_SWEV0_cb;
+		IRQ_CONNECT(INT_SWEV0 - 16, 6, sl_isr, &sl_SWEV0_cb, 0);
 		break;
 	default:
 		return(NULL);
@@ -218,4 +248,21 @@ uintptr_t HwiP_disable(void)
 void HwiP_restore(uintptr_t key)
 {
 	irq_unlock(key);
+}
+
+void HwiP_post(int interruptNum)
+{
+	IntPendSet((uint32_t)interruptNum);
+}
+
+void HwiP_setFunc(HwiP_Handle hwiP, HwiP_Fxn fxn, uintptr_t arg)
+{
+	HwiP_Obj *obj = (HwiP_Obj *)hwiP;
+
+	uintptr_t key = HwiP_disable();
+
+	obj->cb->cb = fxn;
+	obj->cb->arg = arg;
+
+	HwiP_restore(key);
 }

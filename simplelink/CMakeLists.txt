@@ -71,6 +71,7 @@ elseif(CONFIG_HAS_CC13X2_CC26X2_SDK)
     kernel/zephyr/dpl/ClockP_zephyr.c
     kernel/zephyr/dpl/HwiP_zephyr.c
     kernel/zephyr/dpl/SwiP_zephyr.c
+    kernel/zephyr/dpl/QueueP_zephyr.c
     )
 
   if(CONFIG_SOC_CC1352R)
