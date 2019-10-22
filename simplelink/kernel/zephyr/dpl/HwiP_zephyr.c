@@ -127,9 +127,9 @@ void HwiP_delete(HwiP_Handle handle)
 	irq_disable(interruptNum - 16);
 }
 #elif defined(CONFIG_SOC_SERIES_CC13X2_CC26X2)
-/* TODO: INT_PENDSV is already taken for another purpose, so let's use
- * INT_SWEV0 since it is currently unused. Not sure if this would be a
- * problem for anyone.
+/* INT_PENDSV is already taken by Zephyr, so let's use INT_SWEV0 to support
+ * SwiP since this line is usually unused. Change this to a different
+ * interrupt if desired.
  */
 int HwiP_swiPIntNum = INT_SWEV0;
 
