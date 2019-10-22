@@ -144,6 +144,23 @@ SwiP_Handle SwiP_construct(SwiP_Struct *handle, SwiP_Fxn swiFxn,
 }
 
 /*
+ *  ======== SwiP_destruct ========
+ */
+void SwiP_destruct(SwiP_Struct *handle)
+{
+    SwiP_Obj *swi = (SwiP_Obj *)handle;
+    uintptr_t hwiKey = HwiP_disable();
+
+    /* if on SwiP_readyList, remove it */
+    QueueP_remove(&swi->elem);
+    if (QueueP_empty(swi->readyList)) {
+        SwiP_readyMask &= ~(1 << swi->params.priority);
+    }
+
+    HwiP_restore(hwiKey);
+}
+
+/*
  *  ======== SwiP_disable ========
  */
 uintptr_t SwiP_disable(void)
