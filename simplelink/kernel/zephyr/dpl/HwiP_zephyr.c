@@ -150,16 +150,13 @@ HwiP_Handle HwiP_construct(HwiP_Struct *handle, int interruptNum,
 {
 	HwiP_Obj *obj = (HwiP_Obj *)handle;
 	uintptr_t arg = 0;
-	uint8_t priority = 255; /* default to lowest priority */
+	uint8_t priority = INT_PRI_LEVEL7; /* default to lowest priority */
 	
 	if (handle == NULL) {
 		return NULL;
 	}
 
 	if (params) {
-		__ASSERT(((0 <= priority) && (255 >= priority)),
-			"Expected priority: 0 to 255, got: 0x%x\r\n",
-			(unsigned int)priority);
 		priority = params->priority;
 		arg = params->arg;
 	}
@@ -171,6 +168,33 @@ HwiP_Handle HwiP_construct(HwiP_Struct *handle, int interruptNum,
 		|| INT_SWEV0 == interruptNum,
 		 "Unexpected interruptNum: %d\r\n",
 		 interruptNum);
+
+	/*
+	 * Priority expected is either:
+	 *    INT_PRI_LEVEL1 to INT_PRI_LEVEL7,
+	 *    or ~0 or 255 (meaning lowest priority)
+	 *    ~0 and 255 are meant to be the same as INT_PRI_LEVEL7.
+	 *    For ~0 or 255, we want 7; but Zephyr IRQ_CONNECT adds +1
+	 *    to reserve INT_PRI_LEVEL0,
+	 *    so we pass 6 for those TI drivers passing prio = ~0.
+	 */
+	__ASSERT((INT_PRI_LEVEL7 == priority) ||
+		(INT_PRI_LEVEL6 == priority) ||
+		(INT_PRI_LEVEL5 == priority) ||
+		(INT_PRI_LEVEL4 == priority) ||
+		(INT_PRI_LEVEL3 == priority) ||
+		(INT_PRI_LEVEL2 == priority) ||
+		(INT_PRI_LEVEL1 == priority) ||
+		(0xFF == priority),
+		"Unexpected priority level, got: 0x%x\r\n",
+		(unsigned int)priority);
+
+	if (0xFF == priority) {
+		priority = INT_PRI_LEVEL7;
+	}
+
+	/* The priority for IRQ_CONNECT is encoded in the top 3 bits */ 
+	priority = (priority >> 5) - 1;
 
 	switch(interruptNum) {
 	case INT_OSC_COMB:
