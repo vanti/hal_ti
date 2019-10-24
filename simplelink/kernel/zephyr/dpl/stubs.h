@@ -3,6 +3,6 @@
 
 #include <zephyr.h>
 
-#define STUB(fmt, args...) printk("%s: %s(): %d: STUB: " fmt "\n", __FILE__, __func__, __LINE__, ##args)
+#define STUB(fmt, args...) printk("%s(): %d: STUB: " fmt "\n", __func__, __LINE__, ##args)
 
 #endif /* STUBS_H_ */
