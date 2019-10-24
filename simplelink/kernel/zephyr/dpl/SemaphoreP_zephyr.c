@@ -168,3 +168,7 @@ SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct *handle, unsigned
 
     return (SemaphoreP_construct(handle, count, &params));
 }
+
+void SemaphoreP_destruct(SemaphoreP_Struct *semP) {
+    STUB("semP: %p", semP);
+}

@@ -283,3 +283,8 @@ void HwiP_setFunc(HwiP_Handle hwiP, HwiP_Fxn fxn, uintptr_t arg)
 
 	HwiP_restore(key);
 }
+
+void HwiP_destruct(HwiP_Struct *hwiP)
+{
+	STUB("hwiP: %p", hwiP);
+}

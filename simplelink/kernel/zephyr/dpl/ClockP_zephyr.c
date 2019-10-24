@@ -141,3 +141,8 @@ bool ClockP_isActive(ClockP_Handle handle) {
     ClockP_Obj *obj = (ClockP_Obj *)handle;
     return obj->active;
 }
+
+void ClockP_destruct(ClockP_Struct *clockP)
+{
+    STUB("clockP: %p", clockP);
+}
