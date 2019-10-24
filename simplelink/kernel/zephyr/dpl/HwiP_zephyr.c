@@ -286,5 +286,13 @@ void HwiP_setFunc(HwiP_Handle hwiP, HwiP_Fxn fxn, uintptr_t arg)
 
 void HwiP_destruct(HwiP_Struct *hwiP)
 {
-	STUB("hwiP: %p", hwiP);
+	HwiP_Obj *obj = (HwiP_Obj *)hwiP->data;
+
+	int interruptNum = obj->intNum;
+
+	irq_disable(interruptNum - 16);
+
+	obj->cb->cb = NULL;
+	obj->cb->arg = NULL;
+	obj->cb = NULL;
 }
