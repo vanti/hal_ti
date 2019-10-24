@@ -294,26 +294,3 @@ void SwiP_restore(uintptr_t key)
 
     HwiP_restore(hwiKey);
 }
-
-SwiP_Handle SwiP_construct(SwiP_Struct *swiP, SwiP_Fxn swiFxn, SwiP_Params *params) {
-    ARG_UNUSED(swiP);
-    ARG_UNUSED(swiFxn);
-    ARG_UNUSED(params);
-    STUB("");
-    return NULL;
-}
-uint32_t SwiP_getTrigger(void) {
-    STUB("");
-    return 0;
-}
-void SwiP_or(SwiP_Handle handle, uint32_t mask) {
-    ARG_UNUSED(handle);
-    ARG_UNUSED(mask);
-    STUB("");
-}
-void SwiP_Params_init(SwiP_Params *params) {
-    params->arg0 = 0;      // could also be a pointer on 32-bit systems
-    params->arg1 = 0;      // could also be a pointer on 32-bit systems
-    params->priority = 0;  // lowest priority
-    params->trigger = 0;   // could also be a pointer on 32-bit systems
-}
