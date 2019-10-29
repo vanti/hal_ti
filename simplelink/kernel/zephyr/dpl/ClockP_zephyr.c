@@ -179,5 +179,13 @@ bool ClockP_isActive(ClockP_Handle handle) {
 
 void ClockP_destruct(ClockP_Struct *clockP)
 {
-    STUB("clockP: %p", clockP);
+	ClockP_Obj *obj = (ClockP_Obj *)clockP->data;
+
+	obj->clock_fxn = NULL;
+	obj->arg = 0;
+	obj->period = 0;
+	obj->timeout = 0;
+	obj->active = false;
+
+	k_timer_stop(&obj->timer);
 }
