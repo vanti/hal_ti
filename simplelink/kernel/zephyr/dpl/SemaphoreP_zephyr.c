@@ -170,5 +170,10 @@ SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct *handle, unsigned
 }
 
 void SemaphoreP_destruct(SemaphoreP_Struct *semP) {
-    STUB("semP: %p", semP);
+    struct k_sem *sem;
+
+    sem = (struct k_sem *)semP->data;
+    if (sem) {
+        k_sem_reset(sem);
+    }
 }
