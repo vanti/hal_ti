@@ -309,6 +309,6 @@ void HwiP_destruct(HwiP_Struct *hwiP)
 	irq_disable(interruptNum - 16);
 
 	obj->cb->cb = NULL;
-	obj->cb->arg = NULL;
+	obj->cb->arg = (uintptr_t)NULL;
 	obj->cb = NULL;
 }
