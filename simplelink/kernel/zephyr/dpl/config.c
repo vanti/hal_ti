@@ -17,7 +17,6 @@
 #include "ti/drivers/rf/RF.h"
 
 #ifdef CONFIG_HAS_CC13X2_CC26X2_SDK
-const PowerCC26X2_Config PowerCC26X2_config;
 const RFCC26XX_HWAttrsV2 RFCC26XX_hwAttrs = {
     .hwiPriority        = INT_PRI_LEVEL7,  // Lowest HWI priority:  INT_PRI_LEVEL7
                                            // Highest HWI priority: INT_PRI_LEVEL1
