@@ -69,7 +69,8 @@ elseif(CONFIG_HAS_CC13X2_CC26X2_SDK)
     source/ti/drivers/rf/RFCC26X2_multiMode.c
 
     kernel/zephyr/dpl/config.c
-    kernel/zephyr/dpl/ClockP_zephyr.c
+    kernel/zephyr/dpl/ClockPTimer_zephyr.c
+    kernel/zephyr/dpl/TimerPCC26XX_zephyr.c
     kernel/zephyr/dpl/HwiP_zephyr.c
     kernel/zephyr/dpl/SwiP_zephyr.c
     kernel/zephyr/dpl/SemaphoreP_zephyr.c
@@ -83,12 +84,20 @@ elseif(CONFIG_HAS_CC13X2_CC26X2_SDK)
       PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC13X2;${COMPILER}" )
     set_source_files_properties(source/ti/drivers/rf/RFCC26X2_multiMode.c
       PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC13X2;${COMPILER}" )
+    set_source_files_properties(kernel/zephyr/dpl/ClockPTimer_zephyr.c
+      PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC13X2;${COMPILER}" )
+    set_source_files_properties(kernel/zephyr/dpl/TimerPCC26XX_zephyr.c
+      PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC13X2;${COMPILER}" )
   else()
     set_source_files_properties(source/ti/drivers/power/PowerCC26X2.c
       PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC26X2;${COMPILER}" )
     set_source_files_properties(source/ti/drivers/power/PowerCC26X2_calibrateRCOSC.c
       PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC26X2;${COMPILER}" )
     set_source_files_properties(source/ti/drivers/rf/RFCC26X2_multiMode.c
+      PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC26X2;${COMPILER}" )
+    set_source_files_properties(kernel/zephyr/dpl/ClockPTimer_zephyr.c
+      PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC26X2;${COMPILER}" )
+    set_source_files_properties(kernel/zephyr/dpl/TimerPCC26XX_zephyr.c
       PROPERTIES COMPILE_DEFINITIONS "DeviceFamily_CC26X2;${COMPILER}" )
   endif()
 

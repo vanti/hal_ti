@@ -80,9 +80,7 @@ typedef void (*ClockP_Fxn)(uintptr_t arg);
  *  SysBIOS:  36
  *  Zephyr:   Modified to match size of ClockP_Obj
  */
-#define ClockP_STRUCT_SIZE   (sizeof(struct k_timer) + \
-	sizeof(ClockP_Fxn) + sizeof(uintptr_t) + \
-	sizeof(uint32_t) * 2) + sizeof(bool)
+#define ClockP_STRUCT_SIZE   32
 
 /*!
  *  @brief    ClockP structure.
